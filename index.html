@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Manajemen Kuliah</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Boxicons for Icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="logo-container">
+                <i class='bx bxs-graduation logo-icon'></i>
+                <span class="logo-text">UniManage</span>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" data-target="dashboard-section">
+                    <i class='bx bxs-dashboard'></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-target="jadwal-section">
+                    <i class='bx bx-calendar-event'></i>
+                    <span>Jadwal Kuliah</span>
+                </a>
+                <a href="#" class="nav-item" data-target="tugas-section">
+                    <i class='bx bx-task'></i>
+                    <span>Tugas</span>
+                </a>
+                <a href="#" class="nav-item" data-target="catatan-section">
+                    <i class='bx bx-notepad'></i>
+                    <span>Catatan</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <p class="watermark">© 2026 Zayyan Fadhlur Rahman. UniManage App - Aplikasi Manajemen Kuliah. All rights
+                    reserved.</p>
+                <p class="version" id="app-version">v1.0.0</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-header">
+                <div class="greeting">
+                    <h1 id="greeting-text">Selamat Pagi, Mahasiswa!</h1>
+                    <p id="current-date">Senin, 1 Januari 2024</p>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <!-- Dashboard Section -->
+                <section id="dashboard-section" class="page-section active">
+                    <div class="dashboard-grid">
+                        <div class="card summary-card gradient-1">
+                            <div class="card-icon"><i class='bx bx-task'></i></div>
+                            <div class="card-info">
+                                <h3>Tugas Belum Selesai</h3>
+                                <p class="metric" id="dash-tugas-count">0</p>
+                            </div>
+                        </div>
+                        <div class="card summary-card gradient-2">
+                            <div class="card-icon"><i class='bx bx-calendar'></i></div>
+                            <div class="card-info">
+                                <h3>Jadwal Hari Ini</h3>
+                                <p class="metric" id="dash-jadwal-count">0</p>
+                            </div>
+                        </div>
+                        <div class="card summary-card gradient-3">
+                            <div class="card-icon"><i class='bx bx-note'></i></div>
+                            <div class="card-info">
+                                <h3>Total Catatan</h3>
+                                <p class="metric" id="dash-catatan-count">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-widgets">
+                        <div class="widget card">
+                            <div class="widget-header">
+                                <h2><i class='bx bx-alarm-exclamation'></i> Tenggat Waktu Dekat</h2>
+                            </div>
+                            <ul class="widget-list" id="dash-upcoming-tasks">
+                                <!-- Populated via JS -->
+                            </ul>
+                        </div>
+                        <div class="widget card">
+                            <div class="widget-header">
+                                <h2><i class='bx bx-time-five'></i> Jadwal Selanjutnya</h2>
+                            </div>
+                            <ul class="widget-list" id="dash-upcoming-schedule">
+                                <!-- Populated via JS -->
+                            </ul>
+                        </div>
+                        <div class="widget card">
+                            <div class="widget-header">
+                                <h2><i class='bx bx-calendar-event'></i> Agenda 3 Hari Kedepan</h2>
+                            </div>
+                            <ul class="widget-list" id="dash-upcoming-mingguan">
+                                <!-- Populated via JS -->
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Jadwal Section -->
+                <section id="jadwal-section" class="page-section">
+                    <div class="section-header">
+                        <h2>Manajemen Jadwal</h2>
+                        <button class="btn btn-primary fab-btn" id="btn-add-jadwal"><i class='bx bx-plus'></i> <span
+                                class="fab-text">Tambah Jadwal</span></button>
+                    </div>
+
+                    <div class="tugas-filters" style="margin-bottom: 24px;">
+                        <button class="filter-btn active" id="tab-jadwal-kuliah">Jadwal Kuliah</button>
+                        <button class="filter-btn" id="tab-jadwal-mingguan">Jadwal Mingguan</button>
+                    </div>
+
+                    <div id="view-jadwal-kuliah">
+                        <div class="schedule-form-container card hidden" id="jadwal-form-container">
+                            <form id="jadwal-form">
+                                <div class="form-group">
+                                    <label for="jadwal-mata-kuliah">Mata Kuliah</label>
+                                    <input type="text" id="jadwal-mata-kuliah" required
+                                        placeholder="Contoh: Algoritma dan Pemrograman">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="jadwal-hari">Hari</label>
+                                        <select id="jadwal-hari" required>
+                                            <option value="Senin">Senin</option>
+                                            <option value="Selasa">Selasa</option>
+                                            <option value="Rabu">Rabu</option>
+                                            <option value="Kamis">Kamis</option>
+                                            <option value="Jumat">Jumat</option>
+                                            <option value="Sabtu">Sabtu</option>
+                                            <option value="Minggu">Minggu</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="jadwal-waktu">Waktu Mulai</label>
+                                        <input type="time" id="jadwal-waktu" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="jadwal-waktu-selesai">Waktu Selesai</label>
+                                        <input type="time" id="jadwal-waktu-selesai" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="jadwal-ruangan">Ruangan / Link</label>
+                                    <input type="text" id="jadwal-ruangan"
+                                        placeholder="Contoh: Lab Komputer 1 / Zoom Link">
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                    <button type="button" class="btn btn-secondary"
+                                        id="btn-cancel-jadwal">Batal</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Hari tabs -->
+                        <div class="days-tabs">
+                            <button class="day-tab active" data-day="Senin">Senin</button>
+                            <button class="day-tab" data-day="Selasa">Selasa</button>
+                            <button class="day-tab" data-day="Rabu">Rabu</button>
+                            <button class="day-tab" data-day="Kamis">Kamis</button>
+                            <button class="day-tab" data-day="Jumat">Jumat</button>
+                            <button class="day-tab" data-day="Sabtu">Sabtu</button>
+                        </div>
+
+                        <div class="schedule-list" id="jadwal-list">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+
+                    <div id="view-jadwal-mingguan" class="hidden">
+                        <div class="schedule-form-container card hidden" id="jadwal-mingguan-form-container">
+                            <form id="jadwal-mingguan-form">
+                                <div class="form-group">
+                                    <label for="jm-nama">Nama Kegiatan Khusus</label>
+                                    <input type="text" id="jm-nama" required placeholder="Contoh: Rapat Organisasi">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="jm-tanggal">Tanggal</label>
+                                        <input type="date" id="jm-tanggal" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="jm-waktu">Waktu</label>
+                                        <input type="time" id="jm-waktu" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="jm-lokasi">Lokasi / Link</label>
+                                    <input type="text" id="jm-lokasi" placeholder="Contoh: Gedung A">
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                    <button type="button" class="btn btn-secondary" id="btn-cancel-jm">Batal</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="schedule-list" id="jadwal-mingguan-list">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tugas Section -->
+                <section id="tugas-section" class="page-section">
+                    <div class="section-header">
+                        <h2>Daftar Tugas</h2>
+                        <button class="btn btn-primary fab-btn" id="btn-add-tugas"><i class='bx bx-plus'></i> <span
+                                class="fab-text">Tambah Tugas</span></button>
+                    </div>
+
+                    <div class="tugas-form-container card hidden" id="tugas-form-container">
+                        <form id="tugas-form">
+                            <div class="form-group">
+                                <label for="tugas-judul">Nama Tugas</label>
+                                <input type="text" id="tugas-judul" required
+                                    placeholder="Contoh: Makalah Sistem Informasi">
+                            </div>
+                            <div class="form-group">
+                                <label for="tugas-matkul">Mata Kuliah</label>
+                                <input type="text" id="tugas-matkul" required placeholder="Contoh: Pengantar TI">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="tugas-deadline-date">Tanggal Tenggat</label>
+                                    <input type="date" id="tugas-deadline-date" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tugas-deadline-time">Waktu</label>
+                                    <input type="time" id="tugas-deadline-time" required>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                <button type="button" class="btn btn-secondary" id="btn-cancel-tugas">Batal</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="tugas-filters">
+                        <button class="filter-btn active" data-filter="all">Semua</button>
+                        <button class="filter-btn" data-filter="pending">Belum Selesai</button>
+                        <button class="filter-btn" data-filter="completed">Selesai</button>
+                    </div>
+
+                    <div class="tugas-list" id="tugas-list">
+                        <!-- Populated via JS -->
+                    </div>
+                </section>
+
+                <!-- Catatan Section -->
+                <section id="catatan-section" class="page-section">
+                    <div class="section-header">
+                        <h2>Catatan Kuliah</h2>
+                        <button class="btn btn-primary fab-btn" id="btn-add-catatan"><i class='bx bx-plus'></i> <span
+                                class="fab-text">Buat Catatan</span></button>
+                    </div>
+
+                    <div class="catatan-form-overlay hidden" id="catatan-form-container">
+                        <div class="catatan-form-box card">
+                            <h3>Tulis Catatan</h3>
+                            <form id="catatan-form">
+                                <div class="form-group">
+                                    <label for="catatan-judul">Judul</label>
+                                    <input type="text" id="catatan-judul" required placeholder="Judul...">
+                                </div>
+                                <div class="form-group" style="flex: 1; display: flex; flex-direction: column;">
+                                    <label for="catatan-isi">Isi Catatan</label>
+                                    <textarea id="catatan-isi" style="flex: 1; min-height: 200px;" required
+                                        placeholder="Tuliskan catatan Anda di sini..."></textarea>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-secondary"
+                                        id="btn-cancel-catatan">Batal</button>
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="catatan-grid" id="catatan-list">
+                        <!-- Populated via JS -->
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Custom Modal -->
+    <div id="custom-modal" class="modal-overlay hidden">
+        <div class="modal-box card">
+            <h3 id="modal-title">Konfirmasi</h3>
+            <p id="modal-message">Apakah Anda yakin?</p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="btn-modal-cancel">Batal</button>
+                <button class="btn btn-primary" id="btn-modal-confirm">Ya</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Update Modal -->
+    <div id="update-modal" class="modal-overlay hidden">
+        <div class="modal-box card update-box">
+            <div class="update-header">
+                <i class='bx bx-rocket' style="font-size: 48px; color: var(--primary); margin-bottom: 16px;"></i>
+                <h3 style="margin-bottom: 8px;">Pembaruan Baru!</h3>
+            </div>
+            <div class="update-body"
+                style="text-align: left; margin-bottom: 24px; color: var(--text-muted); font-size: 14px;">
+                <p style="text-align: center; margin-bottom: 16px;">Aplikasi telah diperbarui ke versi <strong
+                        id="update-version-text" style="color: var(--text-main);">v1.0.0</strong></p>
+                <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px;">
+                    <li>✨ Mode fokus layar penuh untuk Catatan</li>
+                    <li>📅 Agenda 3 hari kedepan di Dashboard</li>
+                    <li>🎨 Tampilan Pop-up Notifikasi & Modal baru</li>
+                    <li>🚀 Peningkatan kecepatan & stabilitas</li>
+                </ul>
+            </div>
+            <div class="modal-actions" style="justify-content: stretch;">
+                <button class="btn btn-primary" id="btn-close-update" style="width: 100%;">Lanjutkan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script -->
+    <script src="script.js"></script>
+</body>
+
+</html>
