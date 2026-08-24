@@ -5,12 +5,13 @@ let schedules = JSON.parse(localStorage.getItem('unimanage_schedules')) || [];
 let jadwalMingguan = JSON.parse(localStorage.getItem('unimanage_jadwal_mingguan')) || [];
 let tasks = JSON.parse(localStorage.getItem('unimanage_tasks')) || [];
 let notes = JSON.parse(localStorage.getItem('unimanage_notes')) || [];
+let editingJadwalId = null;
 
 // DOM Elements
 const sections = document.querySelectorAll('.page-section');
 const navItems = document.querySelectorAll('.nav-item');
 
-const APP_VERSION = 'v1.0.1';
+const APP_VERSION = 'v1.0.2';
 
 // Initialize App
 document.addEventListener('DOMContentLoaded', () => {
@@ -115,6 +116,8 @@ function setupJadwal() {
 
     btnAdd.addEventListener('click', () => {
         if (activeTab === 'kuliah') {
+            editingJadwalId = null;
+            formKuliah.reset();
             formContainerKuliah.classList.remove('hidden');
         } else {
             document.getElementById('jadwal-mingguan-form-container').classList.remove('hidden');
@@ -124,6 +127,7 @@ function setupJadwal() {
     btnCancelKuliah.addEventListener('click', () => {
         formContainerKuliah.classList.add('hidden');
         formKuliah.reset();
+        editingJadwalId = null;
     });
 
     formKuliah.addEventListener('submit', (e) => {
@@ -134,18 +138,31 @@ function setupJadwal() {
         const selesai = document.getElementById('jadwal-waktu-selesai').value;
         const ruangan = document.getElementById('jadwal-ruangan').value;
 
-        const newJadwal = {
-            id: Date.now().toString(),
-            matkul, hari, mulai, selesai, ruangan
-        };
+        if (editingJadwalId) {
+            const index = schedules.findIndex(s => s.id === editingJadwalId);
+            if (index > -1) {
+                schedules[index].matkul = matkul;
+                schedules[index].hari = hari;
+                schedules[index].mulai = mulai;
+                schedules[index].selesai = selesai;
+                schedules[index].ruangan = ruangan;
+            }
+            editingJadwalId = null;
+            showToast('Jadwal diperbarui!');
+        } else {
+            const newJadwal = {
+                id: Date.now().toString(),
+                matkul, hari, mulai, selesai, ruangan
+            };
+            schedules.push(newJadwal);
+            showToast('Jadwal ditambahkan!');
+        }
 
-        schedules.push(newJadwal);
         saveData('schedules', schedules);
         formKuliah.reset();
         formContainerKuliah.classList.add('hidden');
         renderJadwal(currentDayFilter);
         updateDashboard();
-        showToast('Jadwal ditambahkan!');
     });
 
     dayTabs.forEach(tab => {
@@ -257,7 +274,8 @@ function renderJadwal(dayFilter) {
                 <p><i class='bx bx-time'></i> ${s.mulai} - ${s.selesai} &nbsp;|&nbsp; <i class='bx bx-map'></i> ${s.ruangan || 'Tidak ditentukan'}</p>
             </div>
             <div class="item-actions">
-                <button class="icon-btn delete" onclick="deleteJadwal('${s.id}', '${dayFilter}')"><i class='bx bx-trash'></i></button>
+                <button class="icon-btn complete" onclick="editJadwal('${s.id}')" style="width: 28px; height: 28px;"><i class='bx bx-edit'></i></button>
+                <button class="icon-btn delete" onclick="deleteJadwal('${s.id}', '${dayFilter}')" style="width: 28px; height: 28px;"><i class='bx bx-trash'></i></button>
             </div>
         `;
         container.appendChild(div);
@@ -272,6 +290,23 @@ window.deleteJadwal = function (id, dayFilter) {
         updateDashboard();
         showToast('Jadwal dihapus!');
     });
+}
+
+window.editJadwal = function (id) {
+    const s = schedules.find(x => x.id === id);
+    if (!s) return;
+
+    editingJadwalId = id;
+    document.getElementById('jadwal-mata-kuliah').value = s.matkul;
+    document.getElementById('jadwal-hari').value = s.hari;
+    document.getElementById('jadwal-waktu').value = s.mulai;
+    document.getElementById('jadwal-waktu-selesai').value = s.selesai;
+    document.getElementById('jadwal-ruangan').value = s.ruangan || '';
+
+    // Switch to kuliah tab if not already
+    document.getElementById('tab-jadwal-kuliah').click();
+    document.getElementById('jadwal-form-container').classList.remove('hidden');
+    document.getElementById('jadwal-mata-kuliah').focus();
 }
 
 
