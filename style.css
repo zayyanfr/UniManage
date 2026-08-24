@@ -6,7 +6,7 @@
     --card-hover: rgba(51, 65, 85, 0.8);
     --text-main: #f8fafc;
     --text-muted: #94a3b8;
-    
+
     --primary: #3b82f6;
     --primary-hover: #2563eb;
     --secondary: #10b981;
@@ -41,7 +41,7 @@ body {
     color: var(--text-main);
     overflow-x: hidden;
     /* Subtle background pattern/gradient */
-    background-image: 
+    background-image:
         radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15), transparent 25%),
         radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15), transparent 25%);
     background-attachment: fixed;
@@ -49,7 +49,10 @@ body {
 }
 
 /* Base Styles & Typography */
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
     color: var(--text-main);
     font-weight: 600;
 }
@@ -66,7 +69,9 @@ button {
     outline: none;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
     font-family: inherit;
     background: rgba(15, 23, 42, 0.6);
     border: 1px solid var(--border-color);
@@ -78,7 +83,9 @@ input, select, textarea {
     color-scheme: dark;
 }
 
-input:focus, select:focus, textarea:focus {
+input:focus,
+select:focus,
+textarea:focus {
     outline: none;
     border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
@@ -287,8 +294,15 @@ input:focus, select:focus, textarea:focus {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .section-header {
@@ -317,14 +331,25 @@ input:focus, select:focus, textarea:focus {
 .summary-card::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     opacity: 0.1;
     z-index: 0;
 }
 
-.summary-card.gradient-1::before { background: var(--grad-1); }
-.summary-card.gradient-2::before { background: var(--grad-2); }
-.summary-card.gradient-3::before { background: var(--grad-3); }
+.summary-card.gradient-1::before {
+    background: var(--grad-1);
+}
+
+.summary-card.gradient-2::before {
+    background: var(--grad-2);
+}
+
+.summary-card.gradient-3::before {
+    background: var(--grad-3);
+}
 
 .card-icon {
     width: 56px;
@@ -427,14 +452,16 @@ input:focus, select:focus, textarea:focus {
 }
 
 /* Tasks & Schedule List */
-.tugas-list, .schedule-list {
+.tugas-list,
+.schedule-list {
     display: flex;
     flex-direction: column;
     gap: 16px;
     margin-top: 24px;
 }
 
-.tugas-item, .schedule-item {
+.tugas-item,
+.schedule-item {
     background: var(--card-bg);
     border: var(--glass-border);
     border-radius: var(--border-radius-sm);
@@ -445,17 +472,20 @@ input:focus, select:focus, textarea:focus {
     transition: var(--transition);
 }
 
-.tugas-item:hover, .schedule-item:hover {
+.tugas-item:hover,
+.schedule-item:hover {
     background: var(--card-hover);
     transform: translateX(4px);
 }
 
-.tugas-info h3, .schedule-info h3 {
+.tugas-info h3,
+.schedule-info h3 {
     font-size: 16px;
     margin-bottom: 4px;
 }
 
-.tugas-info p, .schedule-info p {
+.tugas-info p,
+.schedule-info p {
     font-size: 13px;
     color: var(--text-muted);
 }
@@ -509,10 +539,25 @@ input:focus, select:focus, textarea:focus {
     background: rgba(255, 255, 255, 0.1);
 }
 
-.badge.danger { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
-.badge.warning { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
-.badge.success { background: rgba(16, 185, 129, 0.2); color: var(--secondary); }
-.badge.primary { background: rgba(59, 130, 246, 0.2); color: var(--primary); }
+.badge.danger {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--danger);
+}
+
+.badge.warning {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--warning);
+}
+
+.badge.success {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--secondary);
+}
+
+.badge.primary {
+    background: rgba(59, 130, 246, 0.2);
+    color: var(--primary);
+}
 
 /* Tabs for Schedule */
 .days-tabs {
@@ -615,6 +660,7 @@ input:focus, select:focus, textarea:focus {
 .card.hidden {
     display: none;
 }
+
 .card {
     margin-bottom: 24px;
 }
@@ -622,11 +668,15 @@ input:focus, select:focus, textarea:focus {
 /* Catatan Form Overlay (Fullscreen Modal) */
 .catatan-form-overlay {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background: rgba(15, 23, 42, 0.9);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    z-index: 2000; /* Above everything */
+    z-index: 2000;
+    /* Above everything */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -642,8 +692,10 @@ input:focus, select:focus, textarea:focus {
 
 .catatan-form-box {
     width: 100%;
-    max-width: 800px; /* almost full screen width on PC */
-    height: 90vh; /* almost full screen height */
+    max-width: 800px;
+    /* almost full screen width on PC */
+    height: 90vh;
+    /* almost full screen height */
     display: flex;
     flex-direction: column;
     margin-bottom: 0;
@@ -673,7 +725,10 @@ input:focus, select:focus, textarea:focus {
 /* Modal and Toasts */
 .modal-overlay {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background: rgba(15, 23, 42, 0.8);
     backdrop-filter: blur(5px);
     z-index: 1000;
@@ -735,7 +790,7 @@ input:focus, select:focus, textarea:focus {
     padding: 16px 24px;
     border-radius: var(--border-radius-sm);
     color: var(--text-main);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     animation: slideInRight 0.3s ease forwards;
     display: flex;
     align-items: center;
@@ -755,13 +810,27 @@ input:focus, select:focus, textarea:focus {
 }
 
 @keyframes slideInRight {
-    from { transform: translateX(100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 @keyframes fadeOutRight {
-    from { transform: translateX(0); opacity: 1; }
-    to { transform: translateX(100%); opacity: 0; }
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
 }
 
 /* Responsive */
@@ -769,7 +838,7 @@ input:focus, select:focus, textarea:focus {
     .app-container {
         flex-direction: column;
     }
-    
+
     .sidebar {
         width: 100%;
         height: auto;
@@ -787,11 +856,12 @@ input:focus, select:focus, textarea:focus {
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
     }
-    
-    .logo-container, .sidebar-footer {
+
+    .logo-container,
+    .sidebar-footer {
         display: none;
     }
-    
+
     .nav-menu {
         display: flex;
         flex-direction: row;
@@ -800,7 +870,7 @@ input:focus, select:focus, textarea:focus {
         width: 100%;
         padding: 8px 4px;
     }
-    
+
     .nav-item {
         flex-direction: column;
         gap: 4px;
@@ -811,7 +881,7 @@ input:focus, select:focus, textarea:focus {
         justify-content: center;
         border-radius: 12px;
     }
-    
+
     .nav-item i {
         font-size: 22px;
     }
@@ -827,10 +897,11 @@ input:focus, select:focus, textarea:focus {
         padding: 4px 12px;
         border-radius: 16px;
     }
-    
+
     .main-content {
         margin-left: 0;
-        padding-bottom: 160px; /* Extra spacing for bottom navbar and FAB so they don't cover content */
+        padding-bottom: 160px;
+        /* Extra spacing for bottom navbar and FAB so they don't cover content */
     }
 
     .top-header {
@@ -840,7 +911,7 @@ input:focus, select:focus, textarea:focus {
     .content-wrapper {
         padding: 16px 20px;
     }
-    
+
     .dashboard-widgets {
         grid-template-columns: 1fr;
         gap: 8px;
@@ -856,14 +927,15 @@ input:focus, select:focus, textarea:focus {
         gap: 8px;
         margin-bottom: 40px;
     }
-    
+
     .greeting h1 {
         font-size: 20px;
     }
 
     .fab-btn {
         position: fixed;
-        bottom: 90px; /* Above the bottom navbar */
+        bottom: 90px;
+        /* Above the bottom navbar */
         left: auto;
         right: 20px;
         width: 56px;

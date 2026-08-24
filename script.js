@@ -10,7 +10,7 @@ let notes = JSON.parse(localStorage.getItem('unimanage_notes')) || [];
 const sections = document.querySelectorAll('.page-section');
 const navItems = document.querySelectorAll('.nav-item');
 
-const APP_VERSION = 'v1.0.0';
+const APP_VERSION = 'v1.0.1';
 
 // Initialize App
 document.addEventListener('DOMContentLoaded', () => {
