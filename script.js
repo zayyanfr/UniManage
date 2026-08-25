@@ -11,7 +11,7 @@ let editingJadwalId = null;
 const sections = document.querySelectorAll('.page-section');
 const navItems = document.querySelectorAll('.nav-item');
 
-const APP_VERSION = 'v1.0.2';
+const APP_VERSION = 'v1.1.0';
 
 // Initialize App
 document.addEventListener('DOMContentLoaded', () => {
@@ -112,7 +112,16 @@ function setupJadwal() {
         document.getElementById('jadwal-mingguan-form-container').classList.add('hidden');
     });
 
-    let currentDayFilter = 'Senin';
+    const hariMap = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    let currentDayFilter = hariMap[new Date().getDay()];
+
+    dayTabs.forEach(tab => {
+        if (tab.getAttribute('data-day') === currentDayFilter) {
+            tab.classList.add('active');
+        } else {
+            tab.classList.remove('active');
+        }
+    });
 
     btnAdd.addEventListener('click', () => {
         if (activeTab === 'kuliah') {
@@ -382,15 +391,20 @@ function renderTugas(filterType) {
     }
 
     filtered.forEach(t => {
-        const isUrgent = !t.completed && isTaskUrgent(t.date);
-        const badge = t.completed ? '<span class="badge success">Selesai</span>' :
-            (isUrgent ? '<span class="badge danger">Mendesak</span>' : '<span class="badge primary">Belum</span>');
+        const isLate = !t.completed && isTaskLate(t.date, t.time);
+        const isUrgent = !t.completed && !isLate && isTaskUrgent(t.date);
+        
+        let badge = '';
+        if (t.completed) badge = '<span class="badge success">Selesai</span>';
+        else if (isLate) badge = '<span class="badge danger">Telat</span>';
+        else if (isUrgent) badge = '<span class="badge warning">Mendesak</span>';
+        else badge = '<span class="badge primary">Belum</span>';
 
         const div = document.createElement('div');
         div.className = `tugas-item ${t.completed ? 'completed' : ''}`;
         div.innerHTML = `
             <div class="tugas-info">
-                <h3>${t.judul} ${badge}</h3>
+                <h3 style="display: flex; align-items: center; gap: 8px;"><span class="task-title">${t.judul}</span> ${badge}</h3>
                 <p>${t.matkul} &nbsp;|&nbsp; <i class='bx bx-calendar'></i> ${formatDate(t.date)} <i class='bx bx-time'></i> ${t.time}</p>
             </div>
             <div class="item-actions">
@@ -400,6 +414,12 @@ function renderTugas(filterType) {
         `;
         container.appendChild(div);
     });
+}
+
+function isTaskLate(dateStr, timeStr) {
+    const today = new Date();
+    const taskDateTime = new Date(`${dateStr}T${timeStr}`);
+    return today > taskDateTime;
 }
 
 function isTaskUrgent(dateStr) {
@@ -557,8 +577,6 @@ function updateDashboard() {
     const todayStr = hariMap[new Date().getDay()];
     document.getElementById('dash-jadwal-count').textContent = schedules.filter(s => s.hari === todayStr).length;
 
-    document.getElementById('dash-catatan-count').textContent = notes.length;
-
     // Upcoming Tasks Widget
     const upcomingTasksList = document.getElementById('dash-upcoming-tasks');
     upcomingTasksList.innerHTML = '';
@@ -570,7 +588,11 @@ function updateDashboard() {
         upcomingTasksList.innerHTML = '<li><span class="info"><p>Tidak ada tugas tertunda.</p></span></li>';
     } else {
         pendingTasks.forEach(t => {
-            const badgeClass = isTaskUrgent(t.date) ? 'danger' : 'primary';
+            const isLate = isTaskLate(t.date, t.time);
+            const isUrgent = !isLate && isTaskUrgent(t.date);
+            let badgeClass = 'primary';
+            if (isLate) badgeClass = 'danger';
+            else if (isUrgent) badgeClass = 'warning';
             upcomingTasksList.innerHTML += `
                 <li>
                     <div class="info">

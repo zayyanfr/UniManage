@@ -526,7 +526,7 @@ textarea:focus {
     opacity: 0.6;
 }
 
-.tugas-item.completed h3 {
+.tugas-item.completed h3 .task-title {
     text-decoration: line-through;
 }
 
